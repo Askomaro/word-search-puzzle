@@ -1,7 +1,4 @@
-def test(i: int, j: int) -> [str]:
-    a = [['a', 'v', 'b', 'y', 'z'],
-         ['k', 'c', 'p', 'o', 'l'],
-         ['c', 'a', 'l', 'n', 'm']]
+def get_strings_for_pos(a: [[str]], i: int, j: int) -> [str]:
 
     result = [_get_forwards(a, i, j),
               _get_backwards(a, i, j),
@@ -12,7 +9,7 @@ def test(i: int, j: int) -> [str]:
               _get_right_down_diagonal(a, i, j),
               _get_left_down_diagonal(a, i, j)]
 
-    return result
+    return filter(lambda el: len(el) > 1, result)
 
 
 def _get_forwards(arr: [[int]], i: int, j: int) -> str:
@@ -75,5 +72,18 @@ def _get_left_down_diagonal(arr: [[int]], i: int, j: int) -> str:
     return result
 
 
+def walk_through(arr: [[str]]) -> [str]:
+    result = []
+    for idx_i, row in enumerate(arr):
+        for idx_j, _ in enumerate(row):
+            result.extend(get_strings_for_pos(arr, idx_i, idx_j))
+
+    return result
+
+
 if __name__ == '__main__':
-    print(test(0, 1))
+    b = [['a', 'v', 'b', 'y', 'z'],
+         ['k', 'c', 'p', 'o', 'l'],
+         ['c', 'a', 'l', 'n', 'm']]
+
+    print(walk_through(b))
