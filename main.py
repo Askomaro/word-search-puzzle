@@ -1,5 +1,7 @@
 import random
 import string
+import timeit
+from trie import Trie
 
 
 def get_strings_for_pos(a: [[str]], i: int, j: int) -> [str]:
@@ -92,12 +94,31 @@ def generate_board(n: int, m: int) -> [[str]]:
 
 
 if __name__ == '__main__':
-    b = [['a', 'v', 'b', 'y', 'z'],
-         ['k', 'c', 'p', 'o', 'l'],
-         ['c', 'a', 'l', 'n', 'm']]
-
     board = generate_board(15, 15)
     possible_words = walk_through(board)
-
     print(possible_words)
 
+    code_to_test = '''
+board = generate_board(15, 15)
+possible_words = walk_through(board)
+trie = Trie()
+trie.insert_list(possible_words)
+with open('words.txt', 'r') as words:
+    for word in words:
+        trie.find(word.rstrip())'''
+    speed = timeit.timeit(code_to_test, globals=globals(), number=10) / 10
+    print(speed)
+
+    code_to_test2 = '''
+board = generate_board(15, 15)
+possible_words = walk_through(board)
+m = []
+with open('words.txt', 'r') as words:
+    for word in words:
+        m.append(word.rstrip())
+
+for ps_word in possible_words:
+    for real_word in m:
+        real_word in ps_word'''
+    speed2 = timeit.timeit(code_to_test2, globals=globals(), number=1) / 1
+    print(speed2)
