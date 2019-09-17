@@ -1,3 +1,7 @@
+import random
+import string
+
+
 def get_strings_for_pos(a: [[str]], i: int, j: int) -> [str]:
 
     result = [_get_forwards(a, i, j),
@@ -72,6 +76,7 @@ def _get_left_down_diagonal(arr: [[int]], i: int, j: int) -> str:
     return result
 
 
+# ----
 def walk_through(arr: [[str]]) -> [str]:
     result = []
     for idx_i, row in enumerate(arr):
@@ -81,9 +86,18 @@ def walk_through(arr: [[str]]) -> [str]:
     return result
 
 
+# ---
+def generate_board(n: int, m: int) -> [[str]]:
+    return [[random.choice(string.ascii_lowercase) for _ in range(n)] for _ in range(m)]
+
+
 if __name__ == '__main__':
     b = [['a', 'v', 'b', 'y', 'z'],
          ['k', 'c', 'p', 'o', 'l'],
          ['c', 'a', 'l', 'n', 'm']]
 
-    print(walk_through(b))
+    board = generate_board(15, 15)
+    possible_words = walk_through(board)
+
+    print(possible_words)
+
