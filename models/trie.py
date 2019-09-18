@@ -12,7 +12,7 @@ class Trie(object):
     def __init__(self):
         self.root = Node()
 
-    def insert(self, word):
+    def insert(self, word: str):
         """
         Inserts a word into a trie
         :type word: str
@@ -65,7 +65,7 @@ class Trie(object):
         else:
             current_node.is_full_word = True
 
-    def insert_list(self, words):
+    def insert_list(self, words: [str]):
         """
         Inserts a word into a trie
         :type words: list of str
@@ -74,7 +74,7 @@ class Trie(object):
         for word in words:
             self.insert(word)
 
-    def find(self, word):
+    def find(self, word) -> bool:
         """
         Returns True if the word is in the trie.
         :type word: str

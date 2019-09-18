@@ -1,124 +1,32 @@
-import random
-import string
-import timeit
-from trie import Trie
+import click
+
+from models.trie import Trie
+from core.puzzle_engine import PuzzleEngine
 
 
-def get_strings_for_pos(a: [[str]], i: int, j: int) -> [str]:
+@click.command()
+@click.option('--i', default=15, help='Number of rows.')
+@click.option('--j', default=15, help='Number of elements in a row.')
+@click.option('--file_name', default='words.txt', help='Name of file with words.')
+def start_app(i, j, file_name):
+    found_words = []
 
-    result = [_get_forwards(a, i, j),
-              _get_backwards(a, i, j),
-              _get_upwards(a, i, j),
-              _get_downwards(a, i, j),
-              _get_left_up_diagonal(a, i, j),
-              _get_right_up_diagonal(a, i, j),
-              _get_right_down_diagonal(a, i, j),
-              _get_left_down_diagonal(a, i, j)]
+    puzzle = PuzzleEngine()
+    puzzle.generate_board(i, j)
+    puzzle.show_board()
+    possible_words = puzzle.get_all_possible_words()
 
-    return filter(lambda el: len(el) > 1, result)
+    trie = Trie()
+    trie.insert_list(possible_words)
 
+    with open(file_name, 'r') as words:
+        for raw_word in words:
+            word = raw_word.rstrip()
+            if trie.find(word):
+                found_words.append(word)
 
-def _get_forwards(arr: [[int]], i: int, j: int) -> str:
-    return ''.join(arr[i][j:])
-
-
-def _get_backwards(arr: [[int]], i: int, j: int) -> str:
-    return ''.join(arr[i][j::-1])
-
-
-def _get_upwards(arr: [[int]], i: int, j: int) -> str:
-    return ''.join([el[j] for el in arr[i::-1]])
-
-
-def _get_downwards(arr: [[int]], i: int, j: int) -> str:
-    return ''.join([el[j] for el in arr[i:]])
-
-
-def _get_left_up_diagonal(arr: [[int]], i: int, j: int) -> str:
-    result = ''
-    while i >= 0 and j >= 0:
-        result += arr[i][j]
-        i -= 1
-        j -= 1
-
-    return result
-
-
-def _get_right_up_diagonal(arr: [[int]], i: int, j: int) -> str:
-    result = ''
-    row_ln = len(arr[0])
-
-    while i >= 0 and j < row_ln:
-        result += arr[i][j]
-        i -= 1
-        j += 1
-
-    return result
-
-
-def _get_right_down_diagonal(arr: [[int]], i: int, j: int) -> str:
-    result = ''
-    row_ln = len(arr[0])
-
-    while i < len(arr) and j < row_ln:
-        result += arr[i][j]
-        i += 1
-        j += 1
-
-    return result
-
-
-def _get_left_down_diagonal(arr: [[int]], i: int, j: int) -> str:
-    result = ''
-    while i < len(arr) and j >= 0:
-        result += arr[i][j]
-        i += 1
-        j -= 1
-
-    return result
-
-
-# ----
-def walk_through(arr: [[str]]) -> [str]:
-    result = []
-    for idx_i, row in enumerate(arr):
-        for idx_j, _ in enumerate(row):
-            result.extend(get_strings_for_pos(arr, idx_i, idx_j))
-
-    return result
-
-
-# ---
-def generate_board(n: int, m: int) -> [[str]]:
-    return [[random.choice(string.ascii_lowercase) for _ in range(n)] for _ in range(m)]
+    print(found_words)
 
 
 if __name__ == '__main__':
-    board = generate_board(15, 15)
-    possible_words = walk_through(board)
-    print(possible_words)
-
-    code_to_test = '''
-board = generate_board(15, 15)
-possible_words = walk_through(board)
-trie = Trie()
-trie.insert_list(possible_words)
-with open('words.txt', 'r') as words:
-    for word in words:
-        trie.find(word.rstrip())'''
-    speed = timeit.timeit(code_to_test, globals=globals(), number=10) / 10
-    print(speed)
-
-    code_to_test2 = '''
-board = generate_board(15, 15)
-possible_words = walk_through(board)
-m = []
-with open('words.txt', 'r') as words:
-    for word in words:
-        m.append(word.rstrip())
-
-for ps_word in possible_words:
-    for real_word in m:
-        real_word in ps_word'''
-    speed2 = timeit.timeit(code_to_test2, globals=globals(), number=1) / 1
-    print(speed2)
+    start_app()
