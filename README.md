@@ -3,6 +3,9 @@ Implementation word search puzzle
 
 Main idea is to use compact prefix tree as data structure to store all possible words and then find needed words.
 Implementation has been taken from another my repository -> https://github.com/Askomaro/python_trie 
+
+Performance: this realization for board 15x15 takes ~ 200 ms 
+
 ##How to use it:
 1. Clone repository
 2. Install dependencies into virtual environment:
