@@ -25,7 +25,6 @@ def test__get_all_possible_words_from_board():
         ['m', 'n', 'l']]
     puzzle = PuzzleEngine()
     puzzle.board = dummy_board
-    print(puzzle.get_all_possible_words())
 
     # act
     all_possible_word = puzzle.get_all_possible_words()
