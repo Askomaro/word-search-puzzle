@@ -25,7 +25,7 @@ class PuzzleEngine:
 
     def get_all_possible_words(self) -> [str]:
         """
-        Get all possible words form a random generated board with next rules:
+        Get all possible words from a random generated board with next rules:
         Words can be found along any diagonal, forwards, upwards, downwards or backwards
         and must not ‘wrap’ between edges
         :rtype: [str]
