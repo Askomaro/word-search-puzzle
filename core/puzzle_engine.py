@@ -7,13 +7,30 @@ class PuzzleEngine:
         self.board = []
 
     def generate_board(self, n: int, m: int) -> [[str]]:
+        """
+        Generates board n x m with random lowercase characters
+        :param n: number of rows
+        :param m: number of elements in a row
+        :rtype: [[str]]
+        :return: generated board
+        """
         self.board = [[random.choice(string.ascii_lowercase) for _ in range(n)] for _ in range(m)]
 
     def show_board(self):
+        """
+        Print in console output a generated board
+        """
         for row in self.board:
             print(' '.join(row))
 
     def get_all_possible_words(self) -> [str]:
+        """
+        Get all possible words form a random generated board with next rules:
+        Words can be found along any diagonal, forwards, upwards, downwards or backwards
+        and must not ‘wrap’ between edges
+        :rtype: [str]
+        :return: all possible words
+        """
         result = []
         for idx_i, row in enumerate(self.board):
             for idx_j, _ in enumerate(row):
